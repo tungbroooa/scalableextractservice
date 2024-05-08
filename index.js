@@ -1,22 +1,34 @@
-function permuteUnique(nums) {
-  nums.sort((a, b) => a - b);
-  const result = [];
-  const used = new Array(nums.length).fill(false);
-  backtrack([]);
-  return result;
-  function backtrack(permutation) {
-    if (permutation.length === nums.length) {
-      result.push([...permutation]);
-      return;
-    }
-    for (let i = 0; i < nums.length; i++) {
-      if (used[i] || (i > 0 && nums[i] === nums[i - 1] && !used[i - 1]))
-        continue;
-      used[i] = true;
-      permutation.push(nums[i]);
-      backtrack(permutation);
-      permutation.pop();
-      used[i] = false;
-    }
+function minWindowSubstring(s, t) {
+  const map = new Map();
+  for (const char of t) {
+    map.set(char, (map.get(char) || 0) + 1);
   }
+  let required = map.size;
+  let left = 0;
+  let right = 0;
+  let minLen = Infinity;
+  let substrStart = 0;
+  while (right < s.length) {
+    const char = s[right];
+    if (map.has(char)) {
+      map.set(char, map.get(char) - 1);
+      if (map.get(char) === 0) required--;
+    }
+    while (required === 0) {
+      if (right - left + 1 < minLen) {
+        minLen = right - left + 1;
+        substrStart = left;
+      }
+      const leftChar = s[left];
+      if (map.has(leftChar)) {
+        map.set(leftChar, map.get(leftChar) + 1);
+        if (map.get(leftChar) > 0) required++;
+      }
+      left++;
+    }
+    right++;
+  }
+  return minLen === Infinity
+    ? ""
+    : s.substring(substrStart, substrStart + minLen);
 }
