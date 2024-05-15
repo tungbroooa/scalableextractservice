@@ -1,22 +1,11 @@
-function shuffle(array) {
-  let currentIndex = array.length,
-    randomIndex;
-
-  // While there are elements remaining
-  while (currentIndex !== 0) {
-    // Pick a remaining element
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-
-    // Swap it with the current element.
-    [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex],
-      array[currentIndex],
-    ];
+function generate(numRows) {
+  const triangle = [];
+  for (let i = 0; i < numRows; i++) {
+    const row = new Array(i + 1).fill(1);
+    for (let j = 1; j < row.length - 1; j++) {
+      row[j] = triangle[i - 1][j - 1] + triangle[i - 1][j];
+    }
+    triangle.push(row);
   }
-
-  return array;
+  return triangle;
 }
-
-const shuffledDeck = shuffle([1, 2, 3, 4, 5]);
-console.log(shuffledDeck);
